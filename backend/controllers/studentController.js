@@ -61,7 +61,7 @@ const getStudents = async (req, res) => {
 
         if (students.length > 0) {
             const modifiedStudents = students.map(student => {
-                return { ...student._doc, password: undefined };  // remove password from all student entries
+                return { ...student._doc, password: undefined };  
             });
             res.send(modifiedStudents);
         } else {
@@ -132,12 +132,11 @@ const updateStudent = async (req, res) => {
     try {
         if (req.body.password) {
             const salt = await bcrypt.genSalt(10);
-            req.body.password = await bcrypt.hash(req.body.password, salt);  // hash password if provided
+            req.body.password = await bcrypt.hash(req.body.password, salt);  
         }
 
         let result = await Student.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
-        result.password = undefined; // remove password from updated result
-        res.send(result);
+        result.password = undefined; 
     } catch (error) {
         res.status(500).json(error);
     }

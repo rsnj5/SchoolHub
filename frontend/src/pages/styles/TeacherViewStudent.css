@@ -1,0 +1,76 @@
+/* TeacherViewStudent.css */
+.student-container {
+    width: 80%;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+.loading {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.student-info {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.attendance-section {
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.attendance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    background: #e0e0e0;
+    border-radius: 6px;
+}
+
+.attendance-details {
+    padding: 10px;
+    background: #f1f1f1;
+    border-radius: 6px;
+}
+
+.attendance-summary {
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.marks-table {
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.marks-row {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.action-btn {
+    display: block;
+    width: fit-content;
+    margin: 10px auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #6200ea;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: #4a00c2;
+}

@@ -1,0 +1,209 @@
+.show-classes-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+  }
+  
+  .error {
+    color: #dc3545;
+  }
+  
+  .add-class-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+  }
+  
+  .no-classes {
+    text-align: center;
+    padding: 3rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 2rem;
+  }
+  
+  .no-classes p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #6c757d;
+  }
+  
+  .primary-button {
+    background: #4e73df;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .primary-button:hover {
+    background: #2e59d9;
+    transform: translateY(-1px);
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+  
+  .action-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .view-button {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+  
+  .view-button:hover {
+    background: #bbdefb;
+  }
+  
+  .delete-button {
+    background: #ffebee;
+    color: #c62828;
+  }
+  
+  .delete-button:hover {
+    background: #ffcdd2;
+  }
+  
+  .add-button {
+    background: #e8f5e9;
+    color: #2e7d32;
+    position: relative;
+  }
+  
+  .add-button:hover {
+    background: #c8e6c9;
+  }
+  
+  .dropdown-container {
+    position: relative;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    min-width: 180px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+  
+  .dropdown-item {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #495057;
+    transition: all 0.2s ease;
+  }
+  
+  .dropdown-item:hover {
+    background: #f8f9fa;
+    color: #4e73df;
+  }
+  
+  .floating-action-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+  }
+  
+  .floating-action-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #4e73df;
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .floating-action-button:hover {
+    background: #2e59d9;
+    transform: scale(1.1);
+  }
+  
+  .floating-action-menu {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    min-width: 200px;
+  }
+  
+  .floating-menu-item {
+    width: 100%;
+    padding: 1rem;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .floating-menu-item:hover {
+    background: #f8f9fa;
+  }
+  
+  .floating-menu-item.delete {
+    color: #c62828;
+  }
+  
+  .floating-menu-item.delete:hover {
+    background: #ffebee;
+  }
+  
+  @media (max-width: 768px) {
+    .show-classes-container {
+      padding: 1rem;
+    }
+    
+    .button-container {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .dropdown-menu {
+      right: auto;
+      left: 0;
+    }
+    
+    .floating-action-container {
+      bottom: 1rem;
+      right: 1rem;
+    }
+  }

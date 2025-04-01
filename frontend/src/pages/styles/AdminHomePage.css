@@ -1,0 +1,132 @@
+.admin-dashboard {
+    max-width: 1300px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Dashboard Title */
+.dashboard-title {
+    font-size: 2.8rem;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+
+/* Horizontal Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 20px;
+    width: 100%;
+    max-width: 1100px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 100%;
+    min-width: 220px;
+    height: 180px;
+}
+
+.stat-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Titles */
+.stat-card h3 {
+    font-size: 1.3rem;
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Stat Values */
+.stat-value {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin: 0.5rem 0;
+    display: block;
+    color: #2c3e50;
+}
+
+/* Stat Description */
+.stat-description {
+    font-size: 1rem;
+    color: rgba(44, 62, 80, 0.8);
+    margin-top: 0.5rem;
+}
+
+/* Gradient Backgrounds */
+.students {
+    background: linear-gradient(135deg, #2980b9, #6ab3f8);
+    color: #fff;
+}
+
+.classes {
+    background: linear-gradient(135deg, #8e44ad, #d37ce0);
+    color: #fff;
+}
+
+.teachers {
+    background: linear-gradient(135deg, #c0392b, #f98d85);
+    color: #fff;
+}
+
+.revenue {
+    background: linear-gradient(135deg, #27ae60, #7fe2a7);
+    color: #fff;
+}
+
+/* Notice Section */
+.notice-section {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 2rem;  /* Ensures spacing below stats */
+}
+
+/* Notice Section Title */
+.section-title {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;  /* 1 column on small screens */
+    }
+
+    .stat-card {
+        width: 90%;
+        margin: auto;
+    }
+}

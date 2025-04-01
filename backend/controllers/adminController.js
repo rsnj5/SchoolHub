@@ -1,11 +1,4 @@
-const bcrypt = require('bcrypt');
 const Admin = require('../models/adminSchema');
-const Sclass = require('../models/sclassSchema');
-const Student = require('../models/studentSchema');
-const Teacher = require('../models/teacherSchema');
-const Subject = require('../models/subjectSchema');
-const Notice = require('../models/noticeSchema');
-const Complain = require('../models/complainSchema');
 
 const adminRegister = async (req, res) => {
     try {

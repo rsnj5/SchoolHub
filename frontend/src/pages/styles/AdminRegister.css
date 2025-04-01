@@ -1,0 +1,180 @@
+.admin-register-page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f7fa;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.register-container {
+    display: flex;
+    width: 90%;
+    max-width: 1100px;
+    height: 80vh;
+    min-height: 600px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.register-form-container {
+    flex: 1;
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-header {
+    margin-bottom: 2.5rem;
+}
+
+.form-header h1 {
+    font-size: 2.2rem;
+    color: #1a1a1a;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.form-header p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group input {
+    padding: 0.9rem 1.2rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.form-group.error input {
+    border-color: #ff4d4f;
+}
+
+.error-message {
+    color: #ff4d4f;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+.password-input {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+}
+
+.submit-btn {
+    background-color: #4a90e2;
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+}
+
+.submit-btn:hover {
+    background-color: #3a7bc8;
+}
+
+.login-redirect {
+    text-align: center;
+    margin-top: 2rem;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.login-redirect a {
+    color: #4a90e2;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.register-image {
+    flex: 1.2;
+    background: linear-gradient(135deg, #4a90e2, #6bb9ff);
+    background-size: cover;
+    position: relative;
+}
+
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3rem;
+    color: white;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+}
+
+.image-overlay h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.image-overlay p {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .register-container {
+        flex-direction: column;
+        height: auto;
+        min-height: auto;
+    }
+
+    .register-form-container {
+        padding: 2.5rem;
+    }
+
+    .register-image {
+        display: none;
+    }
+}

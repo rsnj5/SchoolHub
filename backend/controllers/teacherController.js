@@ -3,11 +3,11 @@ const Teacher = require('../models/teacherSchema.js');
 const Subject = require('../models/subjectSchema.js');
 
 const teacherRegister = async (req, res) => {
-    const { name, email, password, role, school, teachSubject, teachSclass } = req.body;
+    const { name, email, password, role, teachSubject, teachSclass } = req.body;
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(password, salt);
-        const teacher = new Teacher({ name, email, password: hashedPass, role, school, teachSubject, teachSclass });
+        const teacher = new Teacher({ name, email, password: hashedPass, role, teachSubject, teachSclass });
 
         const existingTeacherByEmail = await Teacher.findOne({ email });
 
@@ -18,34 +18,50 @@ const teacherRegister = async (req, res) => {
         const result = await teacher.save();
         await Subject.findByIdAndUpdate(teachSubject, { teacher: teacher._id });
         result.password = undefined;
-        res.send(result);
+        res.status(201).json(result);
     } catch (err) {
-        res.status(500).json(err);
+        console.error(err); 
+        res.status(500).json({ 
+            message: err.message || 'Server error during registration',
+            error: process.env.NODE_ENV === 'development' ? err : undefined
+        });
     }
 };
 
 const teacherLogIn = async (req, res) => {
     try {
+        console.log("Login attempt for:", req.body.email);
+        
         let teacher = await Teacher.findOne({ email: req.body.email });
+        console.log("Teacher found:", teacher ? teacher.email : "None");
+        
         if (!teacher) {
-            return res.send({ message: 'Teacher not found' });
+            console.log("Teacher not found");
+            return res.status(404).json({ message: 'Teacher not found' });
         }
 
-        const validated = await bcrypt.compare(req.body.password, teacher.password);
-        if (!validated) {
-            return res.send({ message: 'Invalid password' });
+        const isValidPassword = await bcrypt.compare(req.body.password, teacher.password);
+        console.log("Password valid:", isValidPassword);
+        
+        if (!isValidPassword) {
+            console.log("Invalid password");
+            return res.status(401).json({ message: 'Invalid password' });
         }
 
-        teacher = await teacher.populate('teachSubject', 'subName sessions')
-                                  .populate('school', 'schoolName')
-                                  .populate('teachSclass', 'sclassName');
+        teacher = await Teacher.populate(teacher, [
+            { path: 'teachSubject', select: 'subName sessions' },
+            { path: 'school', select: 'schoolName' },
+            { path: 'teachSclass', select: 'sclassName' }
+        ]);
+        
         teacher.password = undefined;
-        res.send(teacher);
+        console.log("Login successful for:", teacher.email);
+        res.status(200).json(teacher);
     } catch (err) {
-        res.status(500).json(err);
+        console.error("Login error:", err);
+        res.status(500).json({ error: err.message });
     }
 };
-
 const getTeachers = async (req, res) => {
     try {
         const teachers = await Teacher.find({ school: req.params.id })

@@ -1,0 +1,38 @@
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.loading, .error-text, .info-text {
+    font-size: 1.2rem;
+    color: #d9534f;
+}
+
+.profile-card {
+    width: 350px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.profile-content p {
+    font-size: 1rem;
+    color: #333;
+    margin: 10px 0;
+}
+
+/* Media Queries */
+@media (max-width: 480px) {
+    .profile-card {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .profile-content p {
+        font-size: 0.9rem;
+    }
+}

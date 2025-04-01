@@ -1,0 +1,81 @@
+.teacher-home-container {
+    width: 90%;
+    margin: auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.dashboard {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.info-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    width: 23%;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+}
+
+.info-card img {
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+.info-card p {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 10px 0;
+}
+
+.info-card span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2d8cf0;
+}
+
+.notice-board {
+    margin-top: 30px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries for responsiveness */
+@media screen and (max-width: 1024px) {
+    .info-card {
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .info-card {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .teacher-home-container {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .info-card {
+        width: 100%;
+    }
+}

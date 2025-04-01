@@ -1,0 +1,164 @@
+/* General Layout */
+.dashboard-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fa;
+}
+
+/* Navbar Styles - Modern and Appealing */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
+    padding: 15px 30px;
+    color: white;
+    font-size: 18px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+/* Title - Large and Left-aligned */
+.dashboard-title {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0;
+    background: linear-gradient(to right, #ffffff, #e0f7fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+}
+
+/* Menu Button - Only visible on mobile */
+.menu-button {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Navbar Links Container with Modern Glass Effect */
+.nav-links {
+    display: flex;
+    gap: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 12px 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Navbar Links Styling - Modern Hover Effects */
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 5px 0;
+    position: relative;
+}
+
+.nav-links a:hover {
+    color: #e0f7fa;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #e0f7fa;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Logout Button - Modern Style */
+.logout-btn {
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 75, 43, 0.3);
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 75, 43, 0.4);
+}
+
+/* Content Area */
+.content-area {
+    flex: 1;
+    padding: 30px;
+    background-color: #ffffff;
+}
+
+/* Responsive (Mobile) */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 20px;
+    }
+    
+    .menu-button {
+        display: block;
+        order: 1;
+    }
+    
+    .dashboard-title {
+        order: 2;
+        font-size: 22px;
+        margin-right: auto;
+        margin-left: 15px;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        width: 90%;
+        margin: 0 auto;
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px 0;
+        transform: translateX(0);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-links.open {
+        opacity: 1;
+        pointer-events: all;
+    }
+    
+    .logout-btn {
+        width: 80%;
+        text-align: center;
+        padding: 10px;
+    }
+}
