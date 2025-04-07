@@ -21,26 +21,26 @@ const StudentExamMarks = ({ situation }) => {
     const { response, error, statestatus } = useSelector((state) => state.student);
     const params = useParams()
 
-    const [studentID, setStudentID] = useState("");
-    const [subjectName, setSubjectName] = useState("");
-    const [chosenSubName, setChosenSubName] = useState("");
-    const [marksObtained, setMarksObtained] = useState("");
+    const [studentIdState, setStudentIdState] = useState("");
+    const [subjectNameState, setSubjectNameState] = useState("");
+    const [selectedSubjectId, setSelectedSubjectId] = useState("");
+    const [marksState, setMarksState] = useState("");
 
-    const [showPopup, setShowPopup] = useState(false);
-    const [message, setMessage] = useState("");
-    const [loader, setLoader] = useState(false)
+    const [popupShow, setPopupShow] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         if (situation === "Student") {
-            setStudentID(params.id);
-            const stdID = params.id
-            dispatch(getUserDetails(stdID, "Student"));
+            setStudentIdState(params.id);
+            const studentIdParam = params.id
+            dispatch(getUserDetails(studentIdParam, "Student"));
         }
         else if (situation === "Subject") {
             const { studentID, subjectID } = params
-            setStudentID(studentID);
+            setStudentIdState(studentID);
             dispatch(getUserDetails(studentID, "Student"));
-            setChosenSubName(subjectID);
+            setSelectedSubjectId(subjectID);
         }
     }, [situation]);
 
@@ -50,50 +50,51 @@ const StudentExamMarks = ({ situation }) => {
         }
     }, [dispatch, userDetails]);
 
-    const changeHandler = (event) => {
-        const selectedSubject = subjectsList.find(
-            (subject) => subject.subName === event.target.value
+    const handleChange = (event) => {
+        const chosenSubject = subjectsList.find(
+            (subjectItem) => subjectItem.subName === event.target.value
         );
-        setSubjectName(selectedSubject.subName);
-        setChosenSubName(selectedSubject._id);
+        setSubjectNameState(chosenSubject.subName);
+        setSelectedSubjectId(chosenSubject._id);
     }
 
-    const fields = { subName: chosenSubName, marksObtained }
+    const studentFields = { subName: selectedSubjectId, marksObtained: marksState }
 
-    const submitHandler = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault()
-        setLoader(true)
-        dispatch(updateStudentFields(studentID, fields, "UpdateExamResult"))
+        setIsLoading(true)
+        dispatch(updateStudentFields(studentIdState, studentFields, "UpdateExamResult"))
     }
 
     useEffect(() => {
         if (response) {
-            setLoader(false)
-            setShowPopup(true)
-            setMessage(response)
+            setIsLoading(false)
+            setPopupShow(true)
+            setPopupMessage(response)
         }
         else if (error) {
-            setLoader(false)
-            setShowPopup(true)
-            setMessage("error")
+            setIsLoading(false)
+            setPopupShow(true)
+            setPopupMessage("error")
         }
         else if (statestatus === "added") {
-            setLoader(false)
-            setShowPopup(true)
-            setMessage("Done Successfully")
+            setIsLoading(false)
+            setPopupShow(true)
+            setPopupMessage("Done Successfully")
         }
     }, [response, statestatus, error])
 
     return (
-        <>
+        <div className='container'>
             {loading
                 ?
-                <>
+                <div className='loader-container'>
                     <div>Loading...</div>
-                </>
+                </div>
                 :
-                <>
+                <div className='content-wrapper'>
                     <Box
+                        className='form-container'
                         sx={{
                             flex: '1 1 auto',
                             alignItems: 'center',
@@ -102,6 +103,7 @@ const StudentExamMarks = ({ situation }) => {
                         }}
                     >
                         <Box
+                            className='form-box'
                             sx={{
                                 maxWidth: 550,
                                 px: 3,
@@ -109,72 +111,78 @@ const StudentExamMarks = ({ situation }) => {
                                 width: '100%'
                             }}
                         >
-                            <Stack spacing={1} sx={{ mb: 3 }}>
-                                <Typography variant="h4">
-                                    Student Name: {userDetails.name}
-                                </Typography>
-                                {currentUser.teachSubject &&
+                            <div className='header-section'>
+                                <Stack spacing={1} sx={{ mb: 3 }}>
                                     <Typography variant="h4">
-                                        Subject Name: {currentUser.teachSubject?.subName}
+                                        Student Name: {userDetails.name}
                                     </Typography>
-                                }
-                            </Stack>
-                            <form onSubmit={submitHandler}>
-                                <Stack spacing={3}>
-                                    {
-                                        situation === "Student" &&
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label">
-                                                Select Subject
-                                            </InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={subjectName}
-                                                label="Choose an option"
-                                                onChange={changeHandler} required
-                                            >
-                                                {subjectsList ?
-                                                    subjectsList.map((subject, index) => (
-                                                        <MenuItem key={index} value={subject.subName}>
-                                                            {subject.subName}
-                                                        </MenuItem>
-                                                    ))
-                                                    :
-                                                    <MenuItem value="Select Subject">
-                                                        Add Subjects For Marks
-                                                    </MenuItem>
-                                                }
-                                            </Select>
-                                        </FormControl>
+                                    {currentUser.teachSubject &&
+                                        <Typography variant="h4">
+                                            Subject Name: {currentUser.teachSubject?.subName}
+                                        </Typography>
                                     }
-                                    <FormControl>
-                                        <TextField type="number" label='Enter marks'
-                                            value={marksObtained} required
-                                            onChange={(e) => setMarksObtained(e.target.value)}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                        />
-                                    </FormControl>
                                 </Stack>
-                                <BlueButton
-                                    fullWidth
-                                    size="large"
-                                    sx={{ mt: 3 }}
-                                    variant="contained"
-                                    type="submit"
-                                    disabled={loader}
-                                >
-                                    {loader ? <CircularProgress size={24} color="inherit" /> : "Submit"}
-                                </BlueButton>
+                            </div>
+                            <form onSubmit={handleSubmit}>
+                                <div className='form-fields'>
+                                    <Stack spacing={3}>
+                                        {
+                                            situation === "Student" &&
+                                            <FormControl fullWidth>
+                                                <InputLabel id="subject-select-label">
+                                                    Select Subject
+                                                </InputLabel>
+                                                <Select
+                                                    labelId="subject-select-label"
+                                                    id="subject-select"
+                                                    value={subjectNameState}
+                                                    label="Choose an option"
+                                                    onChange={handleChange} required
+                                                >
+                                                    {subjectsList ?
+                                                        subjectsList.map((subjectItem, index) => (
+                                                            <MenuItem key={index} value={subjectItem.subName}>
+                                                                {subjectItem.subName}
+                                                            </MenuItem>
+                                                        ))
+                                                        :
+                                                        <MenuItem value="Select Subject">
+                                                            Add Subjects For Marks
+                                                        </MenuItem>
+                                                    }
+                                                </Select>
+                                            </FormControl>
+                                        }
+                                        <FormControl>
+                                            <TextField type="number" label='Enter marks'
+                                                value={marksState} required
+                                                onChange={(e) => setMarksState(e.target.value)}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />
+                                        </FormControl>
+                                    </Stack>
+                                </div>
+                                <div className='submit-button'>
+                                    <BlueButton
+                                        fullWidth
+                                        size="large"
+                                        sx={{ mt: 3 }}
+                                        variant="contained"
+                                        type="submit"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Submit"}
+                                    </BlueButton>
+                                </div>
                             </form>
                         </Box>
                     </Box>
-                    <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
-                </>
+                    <Popup message={popupMessage} setShowPopup={setPopupShow} showPopup={popupShow} />
+                </div>
             }
-        </>
+        </div>
     )
 }
 

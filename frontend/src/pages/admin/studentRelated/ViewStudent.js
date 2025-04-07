@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, getUserDetails, updateUser } from '../../../redux/userRelated/userHandle';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom';
 import { getSubjectList } from '../../../redux/sclassRelated/sclassHandle';
 import { Box, Button, Collapse, IconButton, Table, TableBody, TableHead, Typography, Tab, Paper, BottomNavigation, BottomNavigationAction, Container } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
@@ -10,8 +10,8 @@ import TabPanel from '@mui/lab/TabPanel';
 import { KeyboardArrowUp, KeyboardArrowDown, Delete as DeleteIcon } from '@mui/icons-material';
 import { removeStuff, updateStudentFields } from '../../../redux/studentRelated/studentHandle';
 import { calculateOverallAttendancePercentage, calculateSubjectAttendancePercentage, groupAttendanceBySubject } from '../../../components/attendanceCalculator';
-import CustomBarChart from '../../../components/CustomBarChart'
-import CustomPieChart from '../../../components/CustomPieChart'
+import CustomBarChart from '../../../components/CustomBarChart';
+import CustomPieChart from '../../../components/CustomPieChart';
 import { StyledTableCell, StyledTableRow } from '../../../components/styles';
 
 import InsertChartIcon from '@mui/icons-material/InsertChart';
@@ -21,19 +21,19 @@ import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import Popup from '../../../components/Popup';
 
 const ViewStudent = () => {
-    const [showTab, setShowTab] = useState(false);
+    const [showTabState, setShowTabState] = useState(false);
 
-    const navigate = useNavigate()
-    const params = useParams()
-    const dispatch = useDispatch()
+    const navigate = useNavigate();
+    const params = useParams();
+    const dispatch = useDispatch();
     const { userDetails, response, loading, error } = useSelector((state) => state.user);
 
-    const studentID = params.id
-    const address = "Student"
+    const studentId = params.id;
+    const address = "Student";
 
     useEffect(() => {
-        dispatch(getUserDetails(studentID, address));
-    }, [dispatch, studentID])
+        dispatch(getUserDetails(studentId, address));
+    }, [dispatch, studentId]);
 
     useEffect(() => {
         if (userDetails && userDetails.sclassName && userDetails.sclassName._id !== undefined) {
@@ -41,99 +41,94 @@ const ViewStudent = () => {
         }
     }, [dispatch, userDetails]);
 
-    if (response) { console.log(response) }
-    else if (error) { console.log(error) }
+    if (response) { console.log(response); }
+    else if (error) { console.log(error); }
 
-    const [name, setName] = useState('');
-    const [rollNum, setRollNum] = useState('');
-    const [password, setPassword] = useState('');
-    const [sclassName, setSclassName] = useState('');
-    const [studentSchool, setStudentSchool] = useState('');
-    const [subjectMarks, setSubjectMarks] = useState('');
-    const [subjectAttendance, setSubjectAttendance] = useState([]);
+    const [studentName, setStudentName] = useState('');
+    const [rollNumber, setRollNumber] = useState('');
+    const [studentPassword, setStudentPassword] = useState('');
+    const [studentClass, setStudentClass] = useState('');
+    const [schoolInfo, setSchoolInfo] = useState('');
+    const [examResults, setExamResults] = useState('');
+    const [attendanceRecords, setAttendanceRecords] = useState([]);
 
-    const [openStates, setOpenStates] = useState({});
+    const [openCollapseStates, setOpenCollapseStates] = useState({});
 
-    const [showPopup, setShowPopup] = useState(false);
-    const [message, setMessage] = useState("");
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
 
-    const handleOpen = (subId) => {
-        setOpenStates((prevState) => ({
+    const handleCollapseToggle = (subId) => {
+        setOpenCollapseStates((prevState) => ({
             ...prevState,
             [subId]: !prevState[subId],
         }));
     };
 
-    const [value, setValue] = useState('1');
+    const [activeTab, setActiveTab] = useState('1');
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
+    const handleTabChange = (event, newValue) => {
+        setActiveTab(newValue);
     };
 
-    const [selectedSection, setSelectedSection] = useState('table');
-    const handleSectionChange = (event, newSection) => {
-        setSelectedSection(newSection);
+    const [currentView, setCurrentView] = useState('table');
+    const handleViewChange = (event, newView) => {
+        setCurrentView(newView);
     };
 
-    const fields = password === ""
-        ? { name, rollNum }
-        : { name, rollNum, password }
+    const updateFields = studentPassword === ""
+        ? { name: studentName, rollNum: rollNumber }
+        : { name: studentName, rollNum: rollNumber, password: studentPassword };
 
     useEffect(() => {
         if (userDetails) {
-            setName(userDetails.name || '');
-            setRollNum(userDetails.rollNum || '');
-            setSclassName(userDetails.sclassName || '');
-            setStudentSchool(userDetails.school || '');
-            setSubjectMarks(userDetails.examResult || '');
-            setSubjectAttendance(userDetails.attendance || []);
+            setStudentName(userDetails.name || '');
+            setRollNumber(userDetails.rollNum || '');
+            setStudentClass(userDetails.sclassName || '');
+            setSchoolInfo(userDetails.school || '');
+            setExamResults(userDetails.examResult || '');
+            setAttendanceRecords(userDetails.attendance || []);
         }
     }, [userDetails]);
 
-    const submitHandler = (event) => {
-        event.preventDefault()
-        dispatch(updateUser(fields, studentID, address))
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        dispatch(updateUser(updateFields, studentId, address))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
+                dispatch(getUserDetails(studentId, address));
             })
             .catch((error) => {
-                console.error(error)
-            })
-    }
+                console.error(error);
+            });
+    };
 
-    const deleteHandler = () => {
-        setMessage("Sorry the delete function has been disabled for now.")
-        setShowPopup(true)
+    const handleDelete = () => {
+        setPopupMessage("Sorry the delete function has been disabled for now.");
+        setPopupVisible(true);
+    };
 
-        // dispatch(deleteUser(studentID, address))
-        //     .then(() => {
-        //         navigate(-1)
-        //     })
-    }
-
-    const removeHandler = (id, deladdress) => {
-        dispatch(removeStuff(id, deladdress))
+    const handleRemove = (id, delAddress) => {
+        dispatch(removeStuff(id, delAddress))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
-            })
-    }
+                dispatch(getUserDetails(studentId, address));
+            });
+    };
 
-    const removeSubAttendance = (subId) => {
-        dispatch(updateStudentFields(studentID, { subId }, "RemoveStudentSubAtten"))
+    const handleRemoveAttendance = (subId) => {
+        dispatch(updateStudentFields(studentId, { subId }, "RemoveStudentSubAtten"))
             .then(() => {
-                dispatch(getUserDetails(studentID, address));
-            })
-    }
+                dispatch(getUserDetails(studentId, address));
+            });
+    };
 
-    const overallAttendancePercentage = calculateOverallAttendancePercentage(subjectAttendance);
+    const overallAttendancePercentage = calculateOverallAttendancePercentage(attendanceRecords);
     const overallAbsentPercentage = 100 - overallAttendancePercentage;
 
-    const chartData = [
+    const attendanceChartData = [
         { name: 'Present', value: overallAttendancePercentage },
         { name: 'Absent', value: overallAbsentPercentage }
     ];
 
-    const subjectData = Object.entries(groupAttendanceBySubject(subjectAttendance)).map(([subName, { subCode, present, sessions }]) => {
+    const subjectWiseData = Object.entries(groupAttendanceBySubject(attendanceRecords)).map(([subName, { subCode, present, sessions }]) => {
         const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
         return {
             subject: subName,
@@ -143,12 +138,12 @@ const ViewStudent = () => {
         };
     });
 
-    const StudentAttendanceSection = () => {
+    const AttendanceSection = () => {
         const renderTableSection = () => {
             return (
-                <>
+                <div className="attendance-table-section">
                     <h3>Attendance:</h3>
-                    <Table>
+                    <Table className="attendance-table">
                         <TableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Subject</StyledTableCell>
@@ -158,7 +153,7 @@ const ViewStudent = () => {
                                 <StyledTableCell align="center">Actions</StyledTableCell>
                             </StyledTableRow>
                         </TableHead>
-                        {Object.entries(groupAttendanceBySubject(subjectAttendance)).map(([subName, { present, allData, subId, sessions }], index) => {
+                        {Object.entries(groupAttendanceBySubject(attendanceRecords)).map(([subName, { present, allData, subId, sessions }], index) => {
                             const subjectAttendancePercentage = calculateSubjectAttendancePercentage(present, sessions);
                             return (
                                 <TableBody key={index}>
@@ -169,22 +164,22 @@ const ViewStudent = () => {
                                         <StyledTableCell>{subjectAttendancePercentage}%</StyledTableCell>
                                         <StyledTableCell align="center">
                                             <Button variant="contained"
-                                                onClick={() => handleOpen(subId)}>
-                                                {openStates[subId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
+                                                onClick={() => handleCollapseToggle(subId)}>
+                                                {openCollapseStates[subId] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}Details
                                             </Button>
-                                            <IconButton onClick={() => removeSubAttendance(subId)}>
+                                            <IconButton onClick={() => handleRemoveAttendance(subId)}>
                                                 <DeleteIcon color="error" />
                                             </IconButton>
-                                            <Button variant="contained" sx={styles.attendanceButton}
-                                                onClick={() => navigate(`/Admin/subject/student/attendance/${studentID}/${subId}`)}>
+                                            <Button variant="contained" className="attendance-action-button"
+                                                onClick={() => navigate(`/Admin/subject/student/attendance/${studentId}/${subId}`)}>
                                                 Change
                                             </Button>
                                         </StyledTableCell>
                                     </StyledTableRow>
                                     <StyledTableRow>
                                         <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                            <Collapse in={openStates[subId]} timeout="auto" unmountOnExit>
-                                                <Box sx={{ margin: 1 }}>
+                                            <Collapse in={openCollapseStates[subId]} timeout="auto" unmountOnExit>
+                                                <Box className="attendance-details-box">
                                                     <Typography variant="h6" gutterBottom component="div">
                                                         Attendance Details
                                                     </Typography>
@@ -206,7 +201,7 @@ const ViewStudent = () => {
                                                                         </StyledTableCell>
                                                                         <StyledTableCell align="right">{data.status}</StyledTableCell>
                                                                     </StyledTableRow>
-                                                                )
+                                                                );
                                                             })}
                                                         </TableBody>
                                                     </Table>
@@ -215,65 +210,67 @@ const ViewStudent = () => {
                                         </StyledTableCell>
                                     </StyledTableRow>
                                 </TableBody>
-                            )
-                        }
-                        )}
+                            );
+                        })}
                     </Table>
-                    <div>
+                    <div className="attendance-summary">
                         Overall Attendance Percentage: {overallAttendancePercentage.toFixed(2)}%
                     </div>
-                    <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={() => removeHandler(studentID, "RemoveStudentAtten")}>Delete All</Button>
-                    <Button variant="contained" sx={styles.styledButton} onClick={() => navigate("/Admin/students/student/attendance/" + studentID)}>
+                    <Button variant="contained" color="error" startIcon={<DeleteIcon />} onClick={() => handleRemove(studentId, "RemoveStudentAtten")}>Delete All</Button>
+                    <Button variant="contained" className="add-attendance-button" onClick={() => navigate("/Admin/students/student/attendance/" + studentId)}>
                         Add Attendance
                     </Button>
-                </>
-            )
-        }
+                </div>
+            );
+        };
+
         const renderChartSection = () => {
             return (
-                <>
-                    <CustomBarChart chartData={subjectData} dataKey="attendancePercentage" />
-                </>
-            )
-        }
+                <div className="attendance-chart-section">
+                    <CustomBarChart chartData={subjectWiseData} dataKey="attendancePercentage" />
+                </div>
+            );
+        };
+
         return (
-            <>
-                {subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0
-                    ?
-                    <>
-                        {selectedSection === 'table' && renderTableSection()}
-                        {selectedSection === 'chart' && renderChartSection()}
+            <div className="attendance-container">
+                {attendanceRecords && Array.isArray(attendanceRecords) && attendanceRecords.length > 0
+                    ? (
+                        <>
+                            {currentView === 'table' && renderTableSection()}
+                            {currentView === 'chart' && renderChartSection()}
 
-                        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-                            <BottomNavigation value={selectedSection} onChange={handleSectionChange} showLabels>
-                                <BottomNavigationAction
-                                    label="Table"
-                                    value="table"
-                                    icon={selectedSection === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
-                                />
-                                <BottomNavigationAction
-                                    label="Chart"
-                                    value="chart"
-                                    icon={selectedSection === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
-                                />
-                            </BottomNavigation>
-                        </Paper>
-                    </>
-                    :
-                    <Button variant="contained" sx={styles.styledButton} onClick={() => navigate("/Admin/students/student/attendance/" + studentID)}>
-                        Add Attendance
-                    </Button>
-                }
-            </>
-        )
-    }
+                            <Paper className="view-switcher" elevation={3}>
+                                <BottomNavigation value={currentView} onChange={handleViewChange} showLabels>
+                                    <BottomNavigationAction
+                                        label="Table"
+                                        value="table"
+                                        icon={currentView === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
+                                    />
+                                    <BottomNavigationAction
+                                        label="Chart"
+                                        value="chart"
+                                        icon={currentView === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
+                                    />
+                                </BottomNavigation>
+                            </Paper>
+                        </>
+                    )
+                    : (
+                        <Button variant="contained" className="add-attendance-button" onClick={() => navigate("/Admin/students/student/attendance/" + studentId)}>
+                            Add Attendance
+                        </Button>
+                    )}
+            </div>
+        );
+    };
 
-    const StudentMarksSection = () => {
+    const MarksSection = () => {
         const renderTableSection = () => {
             return (
-                <>
+                <div className="marks-table-section">
                     <h3>Subject Marks:</h3>
-                    <Table>
+                    <Table className="marks-table">
                         <TableHead>
                             <StyledTableRow>
                                 <StyledTableCell>Subject</StyledTableCell>
@@ -281,7 +278,7 @@ const ViewStudent = () => {
                             </StyledTableRow>
                         </TableHead>
                         <TableBody>
-                            {subjectMarks.map((result, index) => {
+                            {examResults.map((result, index) => {
                                 if (!result.subName || !result.marksObtained) {
                                     return null;
                                 }
@@ -294,148 +291,113 @@ const ViewStudent = () => {
                             })}
                         </TableBody>
                     </Table>
-                    <Button variant="contained" sx={styles.styledButton} onClick={() => navigate("/Admin/students/student/marks/" + studentID)}>
+                    <Button variant="contained" className="add-marks-button" onClick={() => navigate("/Admin/students/student/marks/" + studentId)}>
                         Add Marks
                     </Button>
-                </>
-            )
-        }
+                </div>
+            );
+        };
+
         const renderChartSection = () => {
             return (
-                <>
-                    <CustomBarChart chartData={subjectMarks} dataKey="marksObtained" />
-                </>
-            )
-        }
-        return (
-            <>
-                {subjectMarks && Array.isArray(subjectMarks) && subjectMarks.length > 0
-                    ?
-                    <>
-                        {selectedSection === 'table' && renderTableSection()}
-                        {selectedSection === 'chart' && renderChartSection()}
+                <div className="marks-chart-section">
+                    <CustomBarChart chartData={examResults} dataKey="marksObtained" />
+                </div>
+            );
+        };
 
-                        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-                            <BottomNavigation value={selectedSection} onChange={handleSectionChange} showLabels>
-                                <BottomNavigationAction
-                                    label="Table"
-                                    value="table"
-                                    icon={selectedSection === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
-                                />
-                                <BottomNavigationAction
-                                    label="Chart"
-                                    value="chart"
-                                    icon={selectedSection === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
-                                />
-                            </BottomNavigation>
-                        </Paper>
-                    </>
-                    :
-                    <Button variant="contained" sx={styles.styledButton} onClick={() => navigate("/Admin/students/student/marks/" + studentID)}>
-                        Add Marks
-                    </Button>
-                }
-            </>
-        )
-    }
-
-    const StudentDetailsSection = () => {
         return (
-            <div>
-                Name: {userDetails.name}
-                <br />
-                Roll Number: {userDetails.rollNum}
-                <br />
-                Class: {sclassName.sclassName}
-                <br />
-                School: {studentSchool.schoolName}
-                {
-                    subjectAttendance && Array.isArray(subjectAttendance) && subjectAttendance.length > 0 && (
-                        <CustomPieChart data={chartData} />
+            <div className="marks-container">
+                {examResults && Array.isArray(examResults) && examResults.length > 0
+                    ? (
+                        <>
+                            {currentView === 'table' && renderTableSection()}
+                            {currentView === 'chart' && renderChartSection()}
+
+                            <Paper className="view-switcher" elevation={3}>
+                                <BottomNavigation value={currentView} onChange={handleViewChange} showLabels>
+                                    <BottomNavigationAction
+                                        label="Table"
+                                        value="table"
+                                        icon={currentView === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
+                                    />
+                                    <BottomNavigationAction
+                                        label="Chart"
+                                        value="chart"
+                                        icon={currentView === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
+                                    />
+                                </BottomNavigation>
+                            </Paper>
+                        </>
                     )
-                }
-                <Button variant="contained" sx={styles.styledButton} onClick={deleteHandler}>
+                    : (
+                        <Button variant="contained" className="add-marks-button" onClick={() => navigate("/Admin/students/student/marks/" + studentId)}>
+                            Add Marks
+                        </Button>
+                    )}
+            </div>
+        );
+    };
+
+    const DetailsSection = () => {
+        return (
+            <div className="student-details-section">
+                <div className="student-info">
+                    <p>Name: {userDetails.name}</p>
+                    <p>Roll Number: {userDetails.rollNum}</p>
+                    <p>Class: {studentClass.sclassName}</p>
+                    <p>School: {schoolInfo.schoolName}</p>
+                </div>
+                {attendanceRecords && Array.isArray(attendanceRecords) && attendanceRecords.length > 0 && (
+                    <div className="attendance-pie-chart">
+                        <CustomPieChart data={attendanceChartData} />
+                    </div>
+                )}
+                <Button variant="contained" className="delete-button" onClick={handleDelete}>
                     Delete
                 </Button>
-                <br />
-                {/* <Button variant="contained" sx={styles.styledButton} className="show-tab" onClick={() => { setShowTab(!showTab) }}>
-                    {
-                        showTab
-                            ? <KeyboardArrowUp />
-                            : <KeyboardArrowDown />
-                    }
-                    Edit Student
-                </Button>
-                <Collapse in={showTab} timeout="auto" unmountOnExit>
-                    <div className="register">
-                        <form className="registerForm" onSubmit={submitHandler}>
-                            <span className="registerTitle">Edit Details</span>
-                            <label>Name</label>
-                            <input className="registerInput" type="text" placeholder="Enter user's name..."
-                                value={name}
-                                onChange={(event) => setName(event.target.value)}
-                                autoComplete="name" required />
-
-                            <label>Roll Number</label>
-                            <input className="registerInput" type="number" placeholder="Enter user's Roll Number..."
-                                value={rollNum}
-                                onChange={(event) => setRollNum(event.target.value)}
-                                required />
-
-                            <label>Password</label>
-                            <input className="registerInput" type="password" placeholder="Enter user's password..."
-                                value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                                autoComplete="new-password" />
-
-                            <button className="registerButton" type="submit" >Update</button>
-                        </form>
-                    </div>
-                </Collapse> */}
             </div>
-        )
-    }
+        );
+    };
 
     return (
-        <>
+        <div className="student-view-container">
             {loading
-                ?
-                <>
-                    <div>Loading...</div>
-                </>
-                :
-                <>
-                    <Box sx={{ width: '100%', typography: 'body1', }} >
-                        <TabContext value={value}>
-                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                <TabList onChange={handleChange} sx={{ position: 'fixed', width: '100%', bgcolor: 'background.paper', zIndex: 1 }}>
-                                    <Tab label="Details" value="1" />
-                                    <Tab label="Attendance" value="2" />
-                                    <Tab label="Marks" value="3" />
-                                </TabList>
-                            </Box>
-                            <Container sx={{ marginTop: "3rem", marginBottom: "4rem" }}>
-                                <TabPanel value="1">
-                                    <StudentDetailsSection />
-                                </TabPanel>
-                                <TabPanel value="2">
-                                    <StudentAttendanceSection />
-                                </TabPanel>
-                                <TabPanel value="3">
-                                    <StudentMarksSection />
-                                </TabPanel>
-                            </Container>
-                        </TabContext>
-                    </Box>
-                </>
-            }
-            <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
+                ? (
+                    <div className="loading-indicator">Loading...</div>
+                )
+                : (
+                    <div className="student-content">
+                        <Box className="tab-container">
+                            <TabContext value={activeTab}>
+                                <Box className="tab-header">
+                                    <TabList onChange={handleTabChange} className="tab-list">
+                                        <Tab label="Details" value="1" />
+                                        <Tab label="Attendance" value="2" />
+                                        <Tab label="Marks" value="3" />
+                                    </TabList>
+                                </Box>
+                                <Container className="tab-content-container">
+                                    <TabPanel value="1">
+                                        <DetailsSection />
+                                    </TabPanel>
+                                    <TabPanel value="2">
+                                        <AttendanceSection />
+                                    </TabPanel>
+                                    <TabPanel value="3">
+                                        <MarksSection />
+                                    </TabPanel>
+                                </Container>
+                            </TabContext>
+                        </Box>
+                    </div>
+                )}
+            <Popup message={popupMessage} setShowPopup={setPopupVisible} showPopup={popupVisible} />
+        </div>
+    );
+};
 
-        </>
-    )
-}
-
-export default ViewStudent
+export default ViewStudent;
 
 const styles = {
     attendanceButton: {
@@ -452,4 +414,4 @@ const styles = {
             backgroundColor: "#106312",
         }
     }
-}
+};
