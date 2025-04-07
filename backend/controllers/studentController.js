@@ -6,7 +6,13 @@ const studentRegister = async (req, res) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPass = await bcrypt.hash(req.body.password, salt);
-
+        
+        const student = new Student({
+            ...req.body,
+            school: req.body.adminID,
+            password: hashedPass
+        });
+        
         const existingStudent = await Student.findOne({
             rollNum: req.body.rollNum,
             school: req.body.adminID,
@@ -15,17 +21,13 @@ const studentRegister = async (req, res) => {
 
         if (existingStudent) {
             return res.send({ message: 'Roll Number already exists' });
-        } else {
-            const student = new Student({
-                ...req.body,
-                school: req.body.adminID,
-                password: hashedPass
-            });
+        } 
+        
 
             const result = await student.save();
             result.password = undefined; 
             res.send(result);
-        }
+        
     } catch (err) {
         res.status(500).json(err);
     }
@@ -33,16 +35,22 @@ const studentRegister = async (req, res) => {
 
 const studentLogIn = async (req, res) => {
     try {
-        let student = await Student.findOne({ rollNum: req.body.rollNum, name: req.body.studentName });
+        const { rollNum, studentName, password, school, sclassName } = req.body;
+
+        let student = await Student.findOne({ rollNum, name: studentName, school, sclassName });
+
         if (student) {
-            const validated = await bcrypt.compare(req.body.password, student.password);
+            const validated = await bcrypt.compare(password, student.password);
             if (validated) {
-                student = await student.populate("school", "schoolName")
-                                        .populate("sclassName", "sclassName")
-                                        .execPopulate();
+                student = await student
+                    .populate("school", "schoolName")
+                    .populate("sclassName", "sclassName")
+                    .execPopulate();
+
                 student.password = undefined;
                 student.examResult = undefined;
                 student.attendance = undefined;
+
                 res.send(student);
             } else {
                 res.send({ message: 'Invalid password' });

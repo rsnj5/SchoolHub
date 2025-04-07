@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { addStuff } from "../../../redux/userRelated/userHandle";
 import { underControl } from "../../../redux/userRelated/userSlice";
 import Popup from "../../../components/Popup";
-import Classroom from "../../../assets/classroom.png";
 import "../../styles/AddClass.css";
 
 const AddClass = () => {
@@ -54,11 +53,10 @@ const AddClass = () => {
         <>
             <div className="container">
                 <div className="box">
-                    <div className="image-container">
-                        <img src={Classroom} alt="classroom" className="class-image" />
-                    </div>
                     <form onSubmit={submitHandler}>
-                        <h2 style={{marginBottom: '30px', color: '#333', textAlign: 'center'}}>Create New Class</h2>
+                        <h2 style={{ marginBottom: '30px', color: '#333', textAlign: 'center' }}>
+                            Create New Class
+                        </h2>
                         <div className="form-group">
                             <label>Class Name</label>
                             <input
